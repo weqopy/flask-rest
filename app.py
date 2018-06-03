@@ -68,5 +68,14 @@ def update_task(task_id):
     return jsonify({'task': task[0]})
 
 
+@app.route('/todo/api/v1.0/tasks/<int:task_id>', methods=['DELETE'])
+def delete_task(task_id):
+    task = list(filter(lambda t: t['id'] == task_id, tasks))
+    if len(task) == 0:
+        abort(404)
+    tasks.remove(task[0])
+    return jsonify({'result': True})
+
+
 if __name__ == '__main__':
     app.run(debug=True)
