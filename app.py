@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, abort
 
 app = Flask(__name__)
 
@@ -18,6 +18,14 @@ tasks = [{
 @app.route('/todo/api/v1.0/tasks', methods=['GET'])
 def get_tasks():
     return jsonify({'tasks': tasks})
+
+
+@app.route('/todo/api/v1.0/tasks/<int:task_id>', methods=['GET'])
+def get_task(task_id):
+    task = list(filter(lambda t: t['id'] == task_id, tasks))
+    if len(task) == 0:
+        abort(404)
+    return jsonify({'tasks': task[0]})
 
 
 if __name__ == '__main__':
