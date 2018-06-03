@@ -7,6 +7,7 @@ Follows [this site](https://blog.miguelgrinberg.com/post/designing-a-restful-api
 ---
 ## APIs:
 ### **v1.0**
+
 ```
 # first api, get_tasks
 curl -i http://localhost:5000/todo/api/v1.0/tasks
@@ -24,3 +25,11 @@ curl -i -H "Content-Type: application/json" -X DELETE http://localhost:5000/todo
 # security auth
 curl -u root:1230 -i http://localhost:5000/todo/api/v1.0/tasks
 ```
+### **v2.0**
+| HTTP 方法 | URL                                             | 动作         |
+| --------- | ----------------------------------------------- | ------------ |
+| GET       | http://localhost:5000/todo/api/v1.0/tasks           | 检索任务列表 |
+| GET       | http://localhost:5000/todo/api/v1.0/tasks/[task_id] | 检索某个任务 |
+| POST      | http://localhost:5000/todo/api/v1.0/tasks           | 创建新任务   |
+| PUT       | http://localhost:5000/todo/api/v1.0/tasks/[task_id] | 更新任务     |
+| DELETE    | http://localhost:5000/todo/api/v1.0/tasks/[task_id] | 删除任务     |
