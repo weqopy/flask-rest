@@ -9,6 +9,7 @@ flask-httpauth = "*"
 flask-restful = "*"
 passlib = "*"
 flask-sqlalchemy = "*"
+itsdangerous = "*"
 
 [dev-packages]
 
