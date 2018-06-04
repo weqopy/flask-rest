@@ -1,6 +1,8 @@
-from flask import Flask, jsonify, url_for, abort, request
+from flask import Flask, jsonify, url_for, abort, request, g
 from passlib.apps import custom_app_context as pwd_context
 from flask_sqlalchemy import SQLAlchemy
+from flask_httpauth import HTTPBasicAuth
+
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -12,6 +14,22 @@ app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+auth = HTTPBasicAuth()
+
+
+@app.route('/api/v3.0/resource')
+@auth.login_required
+def get_resource():
+    return jsonify({'data': f'Hello, {g.user.username}'})
+
+
+@auth.verify_password
+def verify_password(username, password):
+    user = User.query.filter_by(username=username).first()
+    if not user or not user.verify_password(password):
+        return False
+    g.user = user
+    return True
 
 
 class User(db.Model):
@@ -39,11 +57,9 @@ def new_user():
     user.hash_password(password)
     db.session.add(user)
     db.session.commit()
-    return jsonify({
-        'username': user.username
-    }), 201, {
-        'Location': url_for('get_user', id=user.id, _external=True)
-    }
+    return jsonify({'username': user.username}), \
+                  201, \
+                  {'Location': url_for('get_user', id=user.id, _external=True)}
 
 
 @app.route('/api/v3.0/users/<int:id>')
