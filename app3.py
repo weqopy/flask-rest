@@ -6,34 +6,15 @@ from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer,
                           BadSignature, SignatureExpired)
 
 import os
-basedir = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'the quick brown fox jumps over the lazy dog'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(
-    basedir, 'db.sqlite')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 auth = HTTPBasicAuth()
-
-
-@app.route('/api/v3.0/resource')
-@auth.login_required
-def get_resource():
-    return jsonify({'data': f'Hello, {g.user.username}'})
-
-
-@auth.verify_password
-def verify_password(username_or_token, password):
-    user = User.verify_auth_token(username_or_token)
-    if not user:
-        user = User.query.filter_by(username=username_or_token).first()
-        if not user or not user.verify_password(password):
-            return False
-    g.user = user
-    return True
 
 
 class User(db.Model):
@@ -65,11 +46,15 @@ class User(db.Model):
         return user
 
 
-@app.route('/api/v3.0/token')
-@auth.login_required
-def get_auth_token():
-    token = g.user.generate_auth_token()
-    return jsonify({'token': token.decode('ascii')})
+@auth.verify_password
+def verify_password(username_or_token, password):
+    user = User.verify_auth_token(username_or_token)
+    if not user:
+        user = User.query.filter_by(username=username_or_token).first()
+        if not user or not user.verify_password(password):
+            return False
+    g.user = user
+    return True
 
 
 @app.route('/api/v3.0/users', methods=['POST'])
@@ -77,9 +62,9 @@ def new_user():
     username = request.json.get('username')
     password = request.json.get('password')
     if username is None or password is None:
-        abort(404)
+        abort(400)
     if User.query.filter_by(username=username).first() is not None:
-        abort(404)
+        abort(400)
     user = User(username=username)
     user.hash_password(password)
     db.session.add(user)
@@ -93,9 +78,24 @@ def new_user():
 def get_user(id):
     user = User.query.get(id)
     if not user:
-        abort(404)
+        abort(400)
     return jsonify({'username': user.username})
 
 
+@app.route('/api/v3.0/resource')
+@auth.login_required
+def get_resource():
+    return jsonify({'data': f'Hello, {g.user.username}'})
+
+
+@app.route('/api/v3.0/token')
+@auth.login_required
+def get_auth_token():
+    token = g.user.generate_auth_token()
+    return jsonify({'token': token.decode('ascii')})
+
+
 if __name__ == '__main__':
+    if not os.path.exists('db.sqlite'):
+        db.create_all()
     app.run(debug=True)
