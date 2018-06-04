@@ -6,6 +6,13 @@ Follows [this site](https://blog.miguelgrinberg.com/post/designing-a-restful-api
 
 ## APIs:
 ### **v1.0**
+| HTTP 方法 | URL                                             | 动作         |
+| --------- | ----------------------------------------------- | ------------ |
+| GET       | http://localhost:5000/todo/api/v1.0/tasks           | 检索任务列表 |
+| GET       | http://localhost:5000/todo/api/v1.0/tasks/[task_id] | 检索某个任务 |
+| POST      | http://localhost:5000/todo/api/v1.0/tasks           | 创建新任务   |
+| PUT       | http://localhost:5000/todo/api/v1.0/tasks/[task_id] | 更新任务     |
+| DELETE    | http://localhost:5000/todo/api/v1.0/tasks/[task_id] | 删除任务     |
 
 ```
 # first api, get_tasks
@@ -27,18 +34,26 @@ curl -u root:1230 -i http://localhost:5000/todo/api/v1.0/tasks
 ### **v2.0**
 | HTTP 方法 | URL                                             | 动作         |
 | --------- | ----------------------------------------------- | ------------ |
-| GET       | http://localhost:5000/todo/api/v1.0/tasks           | 检索任务列表 |
-| GET       | http://localhost:5000/todo/api/v1.0/tasks/[task_id] | 检索某个任务 |
-| POST      | http://localhost:5000/todo/api/v1.0/tasks           | 创建新任务   |
-| PUT       | http://localhost:5000/todo/api/v1.0/tasks/[task_id] | 更新任务     |
-| DELETE    | http://localhost:5000/todo/api/v1.0/tasks/[task_id] | 删除任务     |
+| GET       | http://localhost:5000/todo/api/v2.0/tasks           | 检索任务列表 |
+| GET       | http://localhost:5000/todo/api/v2.0/tasks/[task_id] | 检索某个任务 |
+| POST      | http://localhost:5000/todo/api/v2.0/tasks           | 创建新任务   |
+| PUT       | http://localhost:5000/todo/api/v2.0/tasks/[task_id] | 更新任务     |
+| DELETE    | http://localhost:5000/todo/api/v2.0/tasks/[task_id] | 删除任务     |
 
 ### **v3.0**
 | HTTP 方法 | URL                                             | 动作         |
 | --------- | ----------------------------------------------- | ------------ |
-| POST      | http://localhost:5000/todo/api/v3.0/users           | 创建新任务   |
+| POST      | http://localhost:5000/todo/api/v3.0/users           | 注册新用户   |
+| GET      | http://localhost:5000/todo/api/v3.0/resource           | 获取资源   |
+| GET      | http://localhost:5000/todo/api/v3.0/token           | 创建认证令牌   |
 
-*post method*
-`curl -i -X POST -H "Content-Type:application/json" -d '{"username":"admin", "password":"qwe1230"}' http://127.0.0.1:5000/api/v3.0/users`
-
-
+```
+# register new user
+curl -i -X POST -H "Content-Type:application/json" -d '{"username":"admin", "password":"qwe1230"}' http://127.0.0.1:5000/api/v3.0/users
+# get resource by password
+curl -u admin:qwe1230 -i -X GET http://localhost:5000/api/v3.0/resource
+# create token
+curl -u admin:qwe1230 -i -X GET http://localhost:5000/api/v3.0/token
+# get resource by token
+curl -u token:unused -i -X GET http://localhost:5000/api/v3.0/resource
+```
