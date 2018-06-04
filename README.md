@@ -4,7 +4,6 @@ An example for RESTful APIs.
 
 Follows [this site](https://blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask) and [this site](http://www.pythondoc.com/flask-restful/index.html#)
 
----
 ## APIs:
 ### **v1.0**
 
