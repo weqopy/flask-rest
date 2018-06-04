@@ -35,7 +35,9 @@ curl -u root:1230 -i http://localhost:5000/todo/api/v1.0/tasks
 
 ### **v3.0**
 | HTTP 方法 | URL                                             | 动作         |
+| --------- | ----------------------------------------------- | ------------ |
 | POST      | http://localhost:5000/todo/api/v3.0/users           | 创建新任务   |
+
 *post method*
 `curl -i -X POST -H "Content-Type:application/json" -d '{"username":"admin", "password":"qwe1230"}' http://127.0.0.1:5000/api/v3.0/users`
 
