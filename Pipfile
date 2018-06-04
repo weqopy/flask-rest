@@ -7,6 +7,8 @@ name = "pypi"
 flask = "*"
 flask-httpauth = "*"
 flask-restful = "*"
+passlib = "*"
+flask-sqlalchemy = "*"
 
 [dev-packages]
 
