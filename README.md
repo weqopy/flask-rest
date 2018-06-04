@@ -2,7 +2,7 @@
 
 An example for RESTful APIs.
 
-Follows [this site](https://blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask)
+Follows [this site](https://blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask) and [this site](http://www.pythondoc.com/flask-restful/index.html#)
 
 ---
 ## APIs:
@@ -33,3 +33,11 @@ curl -u root:1230 -i http://localhost:5000/todo/api/v1.0/tasks
 | POST      | http://localhost:5000/todo/api/v1.0/tasks           | 创建新任务   |
 | PUT       | http://localhost:5000/todo/api/v1.0/tasks/[task_id] | 更新任务     |
 | DELETE    | http://localhost:5000/todo/api/v1.0/tasks/[task_id] | 删除任务     |
+
+### **v3.0**
+| HTTP 方法 | URL                                             | 动作         |
+| POST      | http://localhost:5000/todo/api/v3.0/users           | 创建新任务   |
+*post method*
+`curl -i -X POST -H "Content-Type:application/json" -d '{"username":"admin", "password":"qwe1230"}' http://127.0.0.1:5000/api/v3.0/users`
+
+
